@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 #include <string>
-#include "InterruptPlayground.h"
+//#include "InterruptPlayground.h"
+#include "microphonePlayground.h"
 
-LiquidCrystal lcd(10, 11, 6, 7, 8, 9);
+/*LiquidCrystal lcd(10, 11, 6, 7, 8, 9);
 
-int const potPin = A1;
-int potVal;
+//int const potPin = A1;
+//int potVal;
 
 void setupDisplay()
 {
@@ -28,13 +29,13 @@ void loopDisplay()
   //  delay(1000);
   //  lcd.print("     ");
 }
-
+*/
 void setup()
 {
-  setupInterrupt();
+  setupMicrophone();
 }
 
 void loop()
 {
-  loopInterrupt();
+  loopMicrophone();
 }
