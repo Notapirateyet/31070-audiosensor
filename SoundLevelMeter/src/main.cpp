@@ -3,6 +3,7 @@
 #include <string>
 //#include "InterruptPlayground.h"
 #include "microphonePlayground.h"
+#include "cloudPlayground.h"
 
 /*LiquidCrystal lcd(10, 11, 6, 7, 8, 9);
 
@@ -32,10 +33,12 @@ void loopDisplay()
 */
 void setup()
 {
-  setupMicrophone();
+  //setupMicrophone();
+  setupCloud();
 }
 
 void loop()
 {
-  loopMicrophone();
+  //loopMicrophone();
+  loopCloud();
 }
