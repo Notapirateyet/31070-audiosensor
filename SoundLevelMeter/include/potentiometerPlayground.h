@@ -1,0 +1,2 @@
+void setupPotentiometer();
+void loopPotentiometer(); 

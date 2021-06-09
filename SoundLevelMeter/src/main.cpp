@@ -4,6 +4,7 @@
 //#include "InterruptPlayground.h"
 #include "microphonePlayground.h"
 #include "cloudPlayground.h"
+#include "potentiometerPlayground.h"
 
 /*LiquidCrystal lcd(10, 11, 6, 7, 8, 9);
 
@@ -34,11 +35,12 @@ void loopDisplay()
 void setup()
 {
   //setupMicrophone();
-  setupCloud();
+  //setupCloud();
 }
 
 void loop()
 {
   //loopMicrophone();
-  loopCloud();
+  //loopCloud();
+  loopPotentiometer(); 
 }
