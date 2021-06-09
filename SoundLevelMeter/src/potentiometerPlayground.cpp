@@ -20,7 +20,9 @@
 
 
 int const potPin = A2; 
-int dBlim = 0;       // variable to store the value coming from the sensor
+int dBread = 0;       // variable to store the value coming from the sensor
+int dBlim = 0; 
+
 
 void setupPotentiometer() 
 {
@@ -28,6 +30,28 @@ void setupPotentiometer()
 }
 
 void loopPotentiometer() {
-  dBlim = analogRead(potPin);    // read the value from the sensor
-  Serial.println('dBlim'); 
+  dBread = analogRead(potPin);    // read the value from the sensor
+ if (dBread <= 250)
+ {
+   dBlim = 50; 
+ }
+ else if (dBread <= 500)
+ {
+   dBlim = 60; 
+ }
+ else if (dBread <= 750)
+ {
+   dBlim = 70; 
+ }
+else if (dBread <= 1000)
+ {
+   dBlim = 80; 
+ }
+ else
+ {
+   dBlim = 90; 
+ }
+
+
+Serial.println(dBlim); 
 }
