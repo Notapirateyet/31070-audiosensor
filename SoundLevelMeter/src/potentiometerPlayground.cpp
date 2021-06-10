@@ -30,20 +30,21 @@ void setupPotentiometer()
 }
 
 void loopPotentiometer() {
+  analogReadResolution(4);
   dBread = analogRead(potPin);    // read the value from the sensor
- if (dBread <= 250)
+ if (dBread <= 3)
  {
    dBlim = 50; 
  }
- else if (dBread <= 500)
+ else if (dBread <= 6)
  {
    dBlim = 60; 
  }
- else if (dBread <= 750)
+ else if (dBread <= 9)
  {
    dBlim = 70; 
  }
-else if (dBread <= 1000)
+else if (dBread <= 12)
  {
    dBlim = 80; 
  }
