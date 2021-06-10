@@ -8,12 +8,14 @@
 #include "cloudPlayground.h"
 #include "potentiometerPlayground.h"
 #include "lcdSoundmeter.h"
+#include "LEDSoundmeter.h"
 
 void setup()
 {
   //setupMicrophone();
   //setupCloud();
   setupLCD();
+  setupLED(); 
 }
 
 void loop()
@@ -22,4 +24,5 @@ void loop()
   //loopCloud();
   //loopPotentiometer();
   loopLCD();
+  loopLED(); 
 }

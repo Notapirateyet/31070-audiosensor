@@ -52,7 +52,5 @@ else if (dBread <= 12)
  {
    dBlim = 90; 
  }
-
-
 Serial.println(dBlim); 
 }

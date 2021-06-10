@@ -1,0 +1,2 @@
+void setupSleep();
+void loopSleep();
