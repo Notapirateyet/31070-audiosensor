@@ -19,7 +19,8 @@ public:
     ~LedMeter();
 };
 
-void setupLED(LedMeter *LedMeter_yeah);
+extern LedMeter earMeter;
+void setupLED();
 void loopLED();
 
 // Don't use these if you can access the class

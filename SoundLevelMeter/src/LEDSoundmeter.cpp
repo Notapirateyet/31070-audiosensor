@@ -1,5 +1,5 @@
-#include "LEDSoundmeter.h"
 #include <Arduino.h>
+#include "LEDSoundmeter.h"
 
 LedMeter::LedMeter(float new_min_value, float new_max_value, int new_pins[])
 {
@@ -30,6 +30,10 @@ void LedMeter::write_value(float value)
 {
   // Convert the level to be between 0 and 8
   int leds_to_turn_on = (int)ceil((value / max_value) * 8);
+  if (value == -1.0)
+  {
+    leds_to_turn_on = 0;
+  }
   // Turn on whatever LED's needs to be turned on
   // Fall-through is expected and desired.
   switch (leds_to_turn_on)
@@ -100,15 +104,18 @@ LedMeter::~LedMeter()
 {
 }
 
-LedMeter *earLEDs;
+// Create class for the LED control, using new pins and minmax values 0-8
+int reverseLEDpins[8] = {13, 12, 11, 10, 9, 8, 7, 6}; // Reverse order pins
+LedMeter earMeter(0, 8);                              // Use this for min 0, max 8, default pins
+// LedMeter earMeter(0, 8, reverseLEDpins);
 unsigned long LED_last_updated = 0;
 unsigned long LED_now = 0;
 unsigned long LED_update_rate = 500; // ms
 int cycle_value = 0;
 
-void setupLED(LedMeter *LedMeter_yeah)
+void setupLED()
 {
-  earLEDs = LedMeter_yeah;
+  earMeter.write_value(8);
 }
 
 void loopLED()
@@ -117,7 +124,7 @@ void loopLED()
   if (LED_now - LED_last_updated > LED_update_rate)
   {
     LED_last_updated = millis();
-    earLEDs->write_value(cycle_value);
+    earMeter.write_value(cycle_value);
     cycle_value++;
     if (cycle_value > 8)
     {
@@ -128,10 +135,10 @@ void loopLED()
 
 float getLedMaxValue()
 {
-  return earLEDs->get_max_value();
+  return earMeter.get_max_value();
 }
 
 void writeLedCurrentValue(float current_value)
 {
-  earLEDs->write_value(current_value);
+  earMeter.write_value(current_value);
 }

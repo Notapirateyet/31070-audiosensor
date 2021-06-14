@@ -5,6 +5,7 @@
 #include <string>
 #include <ArduinoLowPower.h>
 #include "lcdSoundmeter.h"
+#include "LEDSoundmeter.h"
 
 /*
 Introduction to the course 31070 by Asger and lasse
@@ -23,6 +24,12 @@ void wakeupfunc()
     sleep_count++;
 }
 
+// This function can be used to turn off all LED's before sleeping
+void before_sleeping()
+{
+    writeLedCurrentValue(-1.0);
+}
+
 void setupSleep()
 {
     pinMode(buttonPin, INPUT_PULLUP); // Button is connected to GND
@@ -38,7 +45,7 @@ void loopSleep()
     {
         lcd.setCursor(3, 1);
         lcd.write("Button up");
-        lcd.write(sleep_count);
+        lcd.print(sleep_count);
         // turn LED on:
         sleep_count_old = sleep_count;
     }
@@ -50,6 +57,7 @@ void loopSleep()
         lcd.write("   down");
         if (sleep_count_old == sleep_count)
         {
+            before_sleeping();
             LowPower.sleep();
         }
     }
