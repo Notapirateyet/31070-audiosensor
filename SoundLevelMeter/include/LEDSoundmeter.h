@@ -1,5 +1,6 @@
 // lcdSoundmeter.h
-
+#ifndef LED_SOUNDMETER_H
+#define LED_SOUNDMETER_H
 // Should probably make parts of this const
 class LedMeter
 {
@@ -24,3 +25,5 @@ void loopLED();
 // Don't use these if you can access the class
 float getLedMaxValue();
 void writeLedCurrentValue(float current_value);
+
+#endif

@@ -1,4 +1,4 @@
-// InterruptPLayground.h
+// // InterruptPLayground.h
 
-void setupInterrupt();
-void loopInterrupt();
+// void setupInterrupt();
+// void loopInterrupt();

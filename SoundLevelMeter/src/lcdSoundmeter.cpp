@@ -1,12 +1,13 @@
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include "lcdSoundmeter.h"
 
 // Initialise the lcd with pins
 //LiquidCrystal(rs, enable, d4, d5, d6, d7)
 LiquidCrystal lcd(5, 4, 3, 2, 1, 0);
 // Also wire: VDD to 5V, VCC ti GND, RW to GND, V0 to GND
-
 // Custom symbols used in the display:
+
 byte customCharBar0[8] = {
     0b00000,
     0b00000,
@@ -36,7 +37,6 @@ byte customCharFilled[8] = {
     0b11111,
     0b11111,
     0b11111};
-
 // Private variables for this code
 unsigned long lcd_current_time, lcd_old_time, lcd_last_updated;
 unsigned long lcd_blink_rate = 1000;
