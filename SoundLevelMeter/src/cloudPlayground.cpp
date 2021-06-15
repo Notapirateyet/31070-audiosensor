@@ -19,7 +19,9 @@
   which are called when their values are changed from the Dashboard.
   These functions are generated with the Thing and added at the end of this sketch.
 */
-void onTest1Change();
+// Definitions
+unsigned long last_cloud_update, current_cloud_time;
+unsigned long cloud_update_rate = 5000; // [ms]
 
 void setupCloud()
 {
@@ -43,11 +45,16 @@ void setupCloud()
  */
   setDebugMessageLevel(2);
   ArduinoCloud.printDebugInfo();
+  last_cloud_update = millis();
 }
 
 void loopCloud()
 {
-  ArduinoCloud.update();
+  current_cloud_time = millis();
+  if (current_cloud_time - last_cloud_update >= cloud_update_rate)
+  {
+    ArduinoCloud.update();
+  }
 }
 
 void onTest1Change()
@@ -56,11 +63,6 @@ void onTest1Change()
 }
 
 void onTest2Change()
-{
-  // Do something
-}
-
-void onDBReadChange()
 {
   // Do something
 }
