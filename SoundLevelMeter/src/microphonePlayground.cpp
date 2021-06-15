@@ -11,6 +11,7 @@
 //Parameters
 const int micPin = A0;
 const int potPin = A2;
+int old_pot_reading = 0;
 
 //Variables
 CircularBuffer<int, BUFFER_SIZE> mic_readings;
@@ -51,13 +52,20 @@ void loopMicrophone()
     }
     //Serial.println("Starting data processing");
     // Change output threshold
-    analogReadResolution(4);
+    analogReadResolution(4); // No need for big fancy precise samples
     int pot_reading = analogRead(potPin);
-    // Scale the potentiometer reading to be the same scale as the microphone reading
-    //pot_reading = pot_reading * 900; // Approximation
-    pot_reading = pot_reading << 10;
-    earMeter.set_max_value(pot_reading);
-    analogReadResolution(16);
+    if (old_pot_reading - pot_reading >= 0x0010 || old_pot_reading - pot_reading <= 0x0010)
+    {
+        // Update vars
+        old_pot_reading = pot_reading;
+        // Scale the potentiometer reading to be the same scale as the microphone reading
+        //pot_reading = pot_reading * 900; // Approximation
+        pot_reading = pot_reading << 10;
+        earMeter.set_max_value(pot_reading);
+    }
+    analogReadResolution(16); // Back to old resolution
+
+    // Do some data processing
     while (!mic_readings.isEmpty())
     {
         current_reading = mic_readings.pop();
@@ -86,3 +94,6 @@ void loopMicrophone()
     write_dB_read(average); 
 }
 
+    Serial.print("; Max LED: ");
+    Serial.println(earMeter.get_max_value());
+}
