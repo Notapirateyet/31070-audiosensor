@@ -30,6 +30,7 @@ void LedMeter::write_value(float value)
 {
   // Convert the level to be between 0 and 8
   int leds_to_turn_on = (int)ceil((value / max_value) * 8);
+  leds_to_turn_on -= 1;
   if (value == -1.0)
   {
     leds_to_turn_on = 0;
