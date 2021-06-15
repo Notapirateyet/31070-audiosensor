@@ -23,6 +23,8 @@
 unsigned long last_cloud_update, current_cloud_time;
 unsigned long cloud_update_rate = 5000; // [ms]
 
+
+
 void setupCloud()
 {
   // Initialize serial and wait for port to open:
@@ -48,6 +50,8 @@ void setupCloud()
   last_cloud_update = millis();
 }
 
+
+
 void loopCloud()
 {
   current_cloud_time = millis();
@@ -59,7 +63,7 @@ void loopCloud()
 
 void onTest1Change()
 {
-  Serial.println(test1); // Print the string to serial on a change
+  // Serial.println(test1); // Print the string to serial on a change
 }
 
 void onTest2Change()
@@ -70,4 +74,9 @@ void onTest2Change()
 void onDBBoundaryChange()
 {
   // Do something
+}
+
+void write_dB_read(int new_dB_read)
+{
+  dB_read = new_dB_read; 
 }

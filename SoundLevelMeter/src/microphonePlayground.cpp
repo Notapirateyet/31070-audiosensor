@@ -4,7 +4,7 @@
 #include <I2S.h>
 #include <CircularBuffer.h>
 #include "LEDSoundmeter.h"
-#include "thingProperties.h"
+#include "cloudPlayground.h"
 
 #define BUFFER_SIZE 1000
 
@@ -73,7 +73,6 @@ void loopMicrophone()
     }
     float average = (float)sound_level_raw / (float)measurements;
     earMeter.write_value(average);
-    dB_read = average; // Send to cloud
     Serial.print("Measurements: ");
     Serial.print(measurements);
     Serial.print("; Min: ");
@@ -84,4 +83,6 @@ void loopMicrophone()
     Serial.print(average);
     Serial.print("; Potmeter: ");
     Serial.println(pot_reading);
+    write_dB_read(average); 
 }
+
