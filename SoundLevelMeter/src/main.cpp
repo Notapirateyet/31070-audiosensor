@@ -13,7 +13,10 @@
 
 void setup()
 {
-  //setupMicrophone();
+  // Open the serial communications and wait for port to open:
+  // Baud rate of 115200 is used instead of 9600 for a faster data rate, which means better quality
+  Serial.begin(9600);
+  setupMicrophone();
   //setupCloud();
   setupLCD();
   setupLED();
@@ -22,7 +25,7 @@ void setup()
 
 void loop()
 {
-  //loopMicrophone();
+  loopMicrophone();
   //loopCloud();
   //loopPotentiometer();
   loopLCD();

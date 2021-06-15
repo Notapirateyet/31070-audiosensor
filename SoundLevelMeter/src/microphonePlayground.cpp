@@ -2,26 +2,53 @@
 
 #include <Arduino.h>
 #include <I2S.h>
+#include <CircularBuffer.h>
+
+#define BUFFER_SIZE 1000
 
 //Parameters
-const int micPin  = A0;
+const int micPin = A0;
 
 //Variables
-int micVal  = 0;
+CircularBuffer<int, BUFFER_SIZE> mic_readings;
+volatile bool buffer_overflow_flag = false;
+
+void measureInterrupt()
+{
+    // Read the analog value
+    int micVal = analogRead(micPin);
+    // Store the value, and check if the buffer is full
+    if (!mic_readings.push(micVal))
+    {
+        buffer_overflow_flag = true; // Flag that the buffer is full
+    }
+}
 
 void setupMicrophone()
 {
-
-    // Open the serial communications and wait for port to open:
-    // Baud rate of 115200 is used instead of 9600 for a faster data rate, which means better quality
-
-    Serial.begin(115200);
     pinMode(micPin, INPUT);
-
+    analogReadResolution(16); //resolution is set as high as possible
 }
 
 void loopMicrophone()
 {
-  analogReadResolution(16); //resolution is set as high as possible
-  micVal = analogRead(micPin); //the analog value is read from the microphone
+    // Read the collected data and send info the serial prompt
+    int sound_level_raw = 0;
+    int measurements = mic_readings.size();
+    // Safety measure if the buffer is empty (unlikely)
+    if (measurements <= 500) // Currently test mode, set == 0 for real
+    {
+        measureInterrupt(); // Remove after debugging check
+        return;
+    }
+    //Serial.println("Starting data processing");
+    while (!mic_readings.isEmpty())
+    {
+        sound_level_raw += mic_readings.pop();
+    }
+    float average = (float)sound_level_raw / (float)measurements;
+    Serial.print("Measurements: ");
+    Serial.print(measurements);
+    Serial.print("; Sound level: ");
+    Serial.println(average);
 }
