@@ -89,11 +89,9 @@ void loopMicrophone()
     Serial.print(max);
     Serial.print("; Average level: ");
     Serial.print(average);
-    Serial.print("; Potmeter: ");
-    Serial.println(pot_reading);
+    //Serial.print("; Potmeter: ");
+    //Serial.println(pot_reading);
     write_dB_read(average); 
-}
-
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
 }
