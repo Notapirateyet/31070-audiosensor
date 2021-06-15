@@ -4,6 +4,7 @@
 #include <I2S.h>
 #include <CircularBuffer.h>
 #include "LEDSoundmeter.h"
+#include "thingProperties.h"
 
 #define BUFFER_SIZE 1000
 
@@ -54,7 +55,7 @@ void loopMicrophone()
     int pot_reading = analogRead(potPin);
     // Scale the potentiometer reading to be the same scale as the microphone reading
     //pot_reading = pot_reading * 900; // Approximation
-    pot_reading = pot_reading << 10; 
+    pot_reading = pot_reading << 10;
     earMeter.set_max_value(pot_reading);
     analogReadResolution(16);
     while (!mic_readings.isEmpty())
@@ -72,6 +73,7 @@ void loopMicrophone()
     }
     float average = (float)sound_level_raw / (float)measurements;
     earMeter.write_value(average);
+    dB_read = average; // Send to cloud
     Serial.print("Measurements: ");
     Serial.print(measurements);
     Serial.print("; Min: ");
