@@ -5,7 +5,7 @@
 // Custom libraries
 //#include "InterruptPlayground.h"
 #include "microphonePlayground.h"
-//#include "cloudPlayground.h"
+#include "cloudPlayground.h"
 //#include "potentiometerPlayground.h"
 #include "lcdSoundmeter.h"
 #include "LEDSoundmeter.h"
@@ -17,7 +17,7 @@ void setup()
   // Baud rate of 115200 is used instead of 9600 for a faster data rate, which means better quality
   Serial.begin(9600);
 
-  //setupCloud();
+  setupCloud();
   setupLCD();
   setupLED();
   setupMicrophone(); // After LED
@@ -27,7 +27,7 @@ void setup()
 void loop()
 {
   loopMicrophone();
-  //loopCloud();
+  loopCloud();
   //loopPotentiometer();
   loopLCD();
   //loopLED();

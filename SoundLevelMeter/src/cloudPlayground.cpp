@@ -10,7 +10,10 @@
 
   The following variables are automatically generated and updated when changes are made to the Thing
 
+  int dB_boundary;
+  int dB_read;
   String test1;
+  CloudAcceleration test2;
 
   Variables which are marked as READ/WRITE in the Cloud Thing will also have functions
   which are called when their values are changed from the Dashboard.
@@ -45,11 +48,24 @@ void setupCloud()
 void loopCloud()
 {
   ArduinoCloud.update();
-  delay(5000);                        // Wait 5 s
-  Serial.println("5 seconds passed"); // Self explanatory
 }
 
 void onTest1Change()
 {
   Serial.println(test1); // Print the string to serial on a change
+}
+
+void onTest2Change()
+{
+  // Do something
+}
+
+void onDBReadChange()
+{
+  // Do something
+}
+
+void onDBBoundaryChange()
+{
+  // Do something
 }

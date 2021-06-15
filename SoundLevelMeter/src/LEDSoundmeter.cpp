@@ -107,7 +107,8 @@ LedMeter::~LedMeter()
 
 // Create class for the LED control, using new pins and minmax values 0-8
 int reverseLEDpins[8] = {13, 12, 11, 10, 9, 8, 7, 6}; // Reverse order pins
-LedMeter earMeter(0, 8);                              // Use this for min 0, max 8, default pins
+int LEDpins[8] = {6, 7, 8, 9, 10, 11, 12, 13};
+LedMeter earMeter(0, 8, LEDpins); // Use this for min 0, max 8, default pins
 // LedMeter earMeter(0, 8, reverseLEDpins);
 unsigned long LED_last_updated = 0;
 unsigned long LED_now = 0;
