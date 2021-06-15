@@ -2,16 +2,13 @@
 #ifndef THINGPROPERTIES_H
 #define THINGPROPERTIES_H
 
-
-
 #include <ArduinoIoTCloud.h>
 #include <Arduino_ConnectionHandler.h>
-
 
 const char THING_ID[] = "ddb5b299-3f31-4cd1-9061-4f4462e501dc";
 
 const char SSID[] = "DR licensvogn"; // Network SSID (name)
-const char PASS[] = "hemmeligkode"; // Network password (use for WPA, or use as key for WEP)
+const char PASS[] = "hemmeligkode";  // Network password (use for WPA, or use as key for WEP)
 
 void onDBBoundaryChange();
 void onDBReadChange();
@@ -27,7 +24,6 @@ void initProperties()
   ArduinoCloud.setThingId(THING_ID);
   ArduinoCloud.addProperty(dB_boundary, READWRITE, ON_CHANGE, onDBBoundaryChange);
   ArduinoCloud.addProperty(dB_read, READ, ON_CHANGE, NULL, 1);
-
 }
 
 WiFiConnectionHandler ArduinoIoTPreferredConnection(SSID, PASS);

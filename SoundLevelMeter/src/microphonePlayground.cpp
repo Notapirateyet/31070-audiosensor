@@ -63,6 +63,7 @@ void loopMicrophone()
         pot_reading = pot_reading << 10;
         earMeter.set_max_value(pot_reading);
     }
+
     analogReadResolution(16); // Back to old resolution
 
     // Do some data processing
@@ -91,7 +92,7 @@ void loopMicrophone()
     Serial.print(average);
     //Serial.print("; Potmeter: ");
     //Serial.println(pot_reading);
-    write_dB_read(average); 
+    write_dB_read(average);
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
 }
