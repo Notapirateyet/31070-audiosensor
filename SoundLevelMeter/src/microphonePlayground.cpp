@@ -47,7 +47,7 @@ void loopMicrophone()
     int min = 10000; // Large
     int pot_reading;
     // Safety measure if the buffer is empty (unlikely)
-    if (measurements < 1000) // Currently test mode, set == 0 for real
+    if (measurements < 10) // Currently test mode, set == 0 for real
     {
         measureInterrupt(); // Remove after debugging check
         return;
