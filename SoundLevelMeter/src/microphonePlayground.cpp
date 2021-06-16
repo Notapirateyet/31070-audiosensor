@@ -44,6 +44,7 @@ void loopMicrophone()
     int current_reading;
     int max = 0;
     int min = 10000; // Large
+    int pot_reading;
     // Safety measure if the buffer is empty (unlikely)
     if (measurements <= 100) // Currently test mode, set == 0 for real
     {
@@ -53,15 +54,17 @@ void loopMicrophone()
     //Serial.println("Starting data processing");
     // Change output threshold
     analogReadResolution(4); // No need for big fancy precise samples
-    int pot_reading = analogRead(potPin);
-    if (old_pot_reading - pot_reading >= 0x0010 || old_pot_reading - pot_reading <= 0x0010)
+    pot_reading = analogRead(potPin);
+//    if (old_pot_reading - pot_reading >= 0x0010 || old_pot_reading - pot_reading <= -0x0010)
+    if (pot_reading != old_pot_reading)
     {
         // Update vars
         old_pot_reading = pot_reading;
         // Scale the potentiometer reading to be the same scale as the microphone reading
         //pot_reading = pot_reading * 900; // Approximation
-        pot_reading = pot_reading << 10;
-        earMeter.set_max_value(pot_reading);
+        int pot_reading_shifted = pot_reading << 10;
+        earMeter.set_max_value(pot_reading_shifted);
+        write_dB_boundary(earMeter.get_max_value()); 
     }
 
     analogReadResolution(16); // Back to old resolution
@@ -90,9 +93,11 @@ void loopMicrophone()
     Serial.print(max);
     Serial.print("; Average level: ");
     Serial.print(average);
-    //Serial.print("; Potmeter: ");
-    //Serial.println(pot_reading);
-    write_dB_read(average);
+    Serial.print("; Potmeter: ");
+    Serial.print(pot_reading);
+
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
+    write_dB_read(average);
+
 }

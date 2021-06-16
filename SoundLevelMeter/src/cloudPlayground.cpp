@@ -54,6 +54,7 @@ void loopCloud()
   current_cloud_time = millis();
   if (current_cloud_time - last_cloud_update >= cloud_update_rate)
   {
+    last_cloud_update = current_cloud_time;
     ArduinoCloud.update();
   }
 }
@@ -76,4 +77,9 @@ void onDBBoundaryChange()
 void write_dB_read(int new_dB_read)
 {
   dB_read = new_dB_read;
+}
+
+void write_dB_boundary(int new_dB_boundary)
+{
+  dB_boundary = new_dB_boundary;
 }
