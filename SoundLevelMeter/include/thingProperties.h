@@ -14,16 +14,20 @@ void onDBBoundaryChange();
 void onDBReadChange();
 void onTest1Change();
 void onTest2Change();
+void onSleepValChange();
+
 
 int dB_boundary;
 int dB_read;
+bool sleep_Val;
+
 
 void initProperties()
 {
-
   ArduinoCloud.setThingId(THING_ID);
   ArduinoCloud.addProperty(dB_boundary, READWRITE, ON_CHANGE, onDBBoundaryChange);
   ArduinoCloud.addProperty(dB_read, READ, ON_CHANGE, NULL, 1);
+  ArduinoCloud.addProperty(sleep_Val, READWRITE, ON_CHANGE, onSleepValChange, 1);
 }
 
 WiFiConnectionHandler ArduinoIoTPreferredConnection(SSID, PASS);

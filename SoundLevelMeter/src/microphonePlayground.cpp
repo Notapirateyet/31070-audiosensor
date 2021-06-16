@@ -5,6 +5,7 @@
 #include <CircularBuffer.h>
 #include "LEDSoundmeter.h"
 #include "cloudPlayground.h"
+#include "lcdSoundmeter.h"
 
 #define BUFFER_SIZE 1000
 
@@ -46,7 +47,7 @@ void loopMicrophone()
     int min = 10000; // Large
     int pot_reading;
     // Safety measure if the buffer is empty (unlikely)
-    if (measurements <= 100) // Currently test mode, set == 0 for real
+    if (measurements < 10) // Currently test mode, set == 0 for real
     {
         measureInterrupt(); // Remove after debugging check
         return;
@@ -98,6 +99,10 @@ void loopMicrophone()
 
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
+
+    lcd.setCursor(0,0);
+    lcd.print(average);
+
     write_dB_read(average);
 
 }
