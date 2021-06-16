@@ -7,6 +7,7 @@
 #include "cloudPlayground.h"
 #include "lcdSoundmeter.h"
 
+
 #define BUFFER_SIZE 1000
 
 //Parameters
@@ -47,7 +48,7 @@ void loopMicrophone()
     int min = 10000; // Large
     int pot_reading;
     // Safety measure if the buffer is empty (unlikely)
-    if (measurements < 10) // Currently test mode, set == 0 for real
+    if (measurements < 500) // Currently test mode, set == 0 for real
     {
         measureInterrupt(); // Remove after debugging check
         return;
@@ -86,6 +87,7 @@ void loopMicrophone()
     }
     float average = (float)sound_level_raw / (float)measurements;
     earMeter.write_value(average);
+    /*
     Serial.print("Measurements: ");
     Serial.print(measurements);
     Serial.print("; Min: ");
@@ -99,7 +101,8 @@ void loopMicrophone()
 
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
-
+*/
+    Serial.println(average);
     lcd.setCursor(0,0);
     lcd.print(average);
 

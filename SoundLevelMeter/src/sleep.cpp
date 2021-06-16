@@ -7,6 +7,7 @@
 #include "lcdSoundmeter.h"
 #include "LEDSoundmeter.h"
 #include "cloudPlayground.h"
+#include "WatchdogAVR.h"
 
 /*
 Introduction to the course 31070 by Asger and lasse
@@ -50,6 +51,13 @@ void loopSleep()
         lcd.print(sleep_count);
         // turn LED on:
         sleep_count_old = sleep_count;
+        
+        if (sleep_bool == true)
+            {
+                before_sleeping();
+                LowPower.sleep();
+                sleep_bool = false; 
+            }
     }
     else if (buttonState == LOW)
     {
@@ -65,10 +73,5 @@ void loopSleep()
     }
     sleep_bool = get_sleep_val(); 
 
-    if (sleep_bool == true)
-        {
-            before_sleeping();
-            LowPower.deepSleep();
-        }
 
 }
