@@ -5,7 +5,7 @@
 // Initialise the lcd with pins
 //LiquidCrystal(rs, enable, d4, d5, d6, d7)
 LiquidCrystal lcd(5, 4, 3, 2, 1, 0);
-// Also wire: VDD to 5V, VCC ti GND, RW to GND, V0 to GND
+// Also wire: VDD to 5V, VCC to GND, RW to GND, V0 to GND
 // Custom symbols used in the display:
 
 byte customCharBar0[8] = {
