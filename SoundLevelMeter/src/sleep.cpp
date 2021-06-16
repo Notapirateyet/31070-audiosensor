@@ -6,6 +6,7 @@
 #include <ArduinoLowPower.h>
 #include "lcdSoundmeter.h"
 #include "LEDSoundmeter.h"
+#include "cloudPlayground.h"
 
 /*
 Introduction to the course 31070 by Asger and lasse
@@ -18,6 +19,7 @@ int const buttonPin = A1;
 volatile int sleep_count = 0;
 int sleep_count_old = 0;
 int buttonState = 0;
+bool sleep_bool = false; 
 
 void wakeupfunc()
 {
@@ -61,4 +63,12 @@ void loopSleep()
             LowPower.sleep();
         }
     }
+    sleep_bool = get_sleep_val(); 
+
+    if (sleep_bool == true)
+        {
+            before_sleeping();
+            LowPower.deepSleep();
+        }
+
 }

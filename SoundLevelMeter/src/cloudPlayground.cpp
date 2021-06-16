@@ -69,6 +69,11 @@ void onTest2Change()
   // Do something
 }
 
+void onSleepValChange() {
+  // Do something
+}
+
+
 void onDBBoundaryChange()
 {
   earMeter.set_max_value(dB_boundary);
@@ -82,4 +87,14 @@ void write_dB_read(int new_dB_read)
 void write_dB_boundary(int new_dB_boundary)
 {
   dB_boundary = new_dB_boundary;
+}
+
+bool get_sleep_val()
+{
+  return sleep_Val; 
+}
+
+bool write_sleep_val(bool new_sleep_val)
+{
+  sleep_Val = new_sleep_val; 
 }
