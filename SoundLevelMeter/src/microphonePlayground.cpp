@@ -130,6 +130,7 @@ void loopMicrophone()
     }
 
     earMeter.write_value(average);
+    /*
     Serial.print("Measurements: ");
     Serial.print(measurements);
     Serial.print("; Min: ");
