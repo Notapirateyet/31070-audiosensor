@@ -7,7 +7,8 @@
 #include "lcdSoundmeter.h"
 #include "LEDSoundmeter.h"
 #include "cloudPlayground.h"
-#include "WatchdogAVR.h"
+#include <SPI.h>
+#include <WiFi101.h>
 
 /*
 Introduction to the course 31070 by Asger and lasse
@@ -56,7 +57,7 @@ void loopSleep()
             {
                 before_sleeping();
                 LowPower.sleep();
-                sleep_bool = false; 
+                WiFi.end();
             }
     }
     else if (buttonState == LOW)
