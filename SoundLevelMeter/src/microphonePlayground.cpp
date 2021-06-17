@@ -9,16 +9,19 @@
 #include <Timer5.h>
 
 #define BUFFER_SIZE 1000
+#define MOVING_AVERAGE_SIZE 4
 
 //Parameters
 const int micPin = A0;
 const int potPin = A2;
 int old_pot_reading = 0;
-const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 200;
+const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = BUFFER_SIZE;
 
 //Variables
 CircularBuffer<int, BUFFER_SIZE> mic_readings;
 CircularBuffer<int, 5> five_max_values;
+CircularBuffer<float, MOVING_AVERAGE_SIZE> mv_average_output;
+float last_mv_average = 0;
 volatile bool buffer_overflow_flag = false;
 volatile bool using_ISP_variable_flag = false;
 
@@ -57,6 +60,11 @@ void setupMicrophone()
         data_max_fs = 0;
         data_min_fs = INT16_MAX;
         data_last_sample_time = 0;
+    }
+    // Fill moving average with 0
+    for (int i = 0; i < MOVING_AVERAGE_SIZE; i++)
+    {
+        mv_average_output.push(0);
     }
 }
 
@@ -124,21 +132,33 @@ void loopMicrophone()
         {
             min = current_reading;
         }
-        for (int i = 0; i < 5; i++)
-        {
-            if (five_max_values[i] < current_reading)
-            {
-                five_max_values.push(current_reading);
-            }
-        }
+        // TEST
+        // for (int i = 0; i < 5; i++)
+        // {
+        //     if (five_max_values[i] < current_reading)
+        //     {
+        //         five_max_values.push(current_reading);
+        //     }
+        // }
     }
     average = (float)sound_level_raw / (float)measurements;
+
+    // Moving average average calculation
+    last_mv_average = last_mv_average + ((average - mv_average_output.pop()) / MOVING_AVERAGE_SIZE);
+    mv_average_output.push(average);
+
+    // Deviation from mean test
+    /*
+    float average_deviation = 0.0;
     for (int i = 0; i < 5; i++)
     {
-        deviations[i] = five_max_values.pop() - average;
+        deviations[i] = five_max_values.pop() - last_mv_average;
+        average_deviation += deviations[i];
     }
+    average_deviation = average_deviation / 5.0;
+    */
 
-    // Timing code part 1, currently measureing LCD time
+    // Timing code part 1, currently measuring LCD time
     if (measure_dataprocessing == true)
     {
         data_last_sample_time = micros(); // Update timing variable
@@ -148,7 +168,7 @@ void loopMicrophone()
     // Output, lcd, led, serial, cloud
     //
     lcd.setCursor(0, 0);
-    lcd.print(average);
+    lcd.print(last_mv_average);
     lcd.write(byte(0));
     lcd.write(byte(1));
 
@@ -176,10 +196,10 @@ void loopMicrophone()
     }
 
     // LED output
-    earMeter.write_value(average);
+    earMeter.write_value(last_mv_average);
 
     // Serial output
-    /*
+
     Serial.print("Measurements: ");
     Serial.print(measurements);
     Serial.print("; Min: ");
@@ -187,14 +207,15 @@ void loopMicrophone()
     Serial.print("; Max: ");
     Serial.print(max);
     Serial.print("; Average level: ");
-    Serial.print(average);
+    Serial.print(last_mv_average);
     Serial.print("; Potmeter: ");
     Serial.print(pot_reading);
     Serial.print("; Max LED: ");
-    Serial.print(earMeter.get_max_value());
-    */
+    Serial.println(earMeter.get_max_value());
+
+    /*
     Serial.print("; max_deviation: ");
-    Serial.print(max - average);
+    Serial.print(max - last_mv_average);
     Serial.print("; 5 deviations: ");
     Serial.print(deviations[0]);
     Serial.print(" | ");
@@ -205,9 +226,10 @@ void loopMicrophone()
     Serial.print(deviations[3]);
     Serial.print(" | ");
     Serial.println(deviations[4]);
+    */
 
     // Cloud output
-    write_dB_read(average);
+    write_dB_read(last_mv_average);
 
     // Set the sampling flag back
     using_ISP_variable_flag = false;
