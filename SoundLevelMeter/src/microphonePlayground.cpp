@@ -6,9 +6,11 @@
 #include "LEDSoundmeter.h"
 #include "cloudPlayground.h"
 #include "lcdSoundmeter.h"
+#include <Timer5.h>
 
 
-#define BUFFER_SIZE 1000
+
+#define BUFFER_SIZE 600
 
 //Parameters
 const int micPin = A0;
@@ -36,6 +38,9 @@ void setupMicrophone()
     analogReadResolution(16); //resolution is set as high as possible
     earMeter.set_max_value(40020);
     earMeter.set_min_value(0);
+    MyTimer5.begin(200); 
+    MyTimer5.attachInterrupt(measureInterrupt);
+    MyTimer5.start();
 }
 
 void loopMicrophone()
@@ -50,7 +55,7 @@ void loopMicrophone()
     // Safety measure if the buffer is empty (unlikely)
     if (measurements < 500) // Currently test mode, set == 0 for real
     {
-        measureInterrupt(); // Remove after debugging check
+        //measureInterrupt(); // Remove after debugging check
         return;
     }
     //Serial.println("Starting data processing");
