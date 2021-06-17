@@ -8,6 +8,8 @@ private:
     int pins[8] = {6, 7, 8, 9, 10, 11, 12, 13};
     float max_value = 8;
     float min_value = 0;
+    // Timing
+    unsigned long LED_max_fs, LED_min_fs, LED_last_sample_time;
 
 public:
     LedMeter(float min_value, float max_value, int pins[8]);
@@ -16,6 +18,7 @@ public:
     float get_max_value();
     void set_max_value(float new_max_value);
     void set_min_value(float new_min_value);
+    bool measure_LED_time = false;
     ~LedMeter();
 };
 

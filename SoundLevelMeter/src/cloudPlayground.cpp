@@ -24,13 +24,12 @@
 unsigned long last_cloud_update, current_cloud_time;
 unsigned long cloud_update_rate = 5000; // [ms]
 
+// Timing
+bool measure_cloud_time = false;
+unsigned long cloud_average_fs, cloud_max_fs, cloud_min_fs, cloud_last_sample_time;
+
 void setupCloud()
 {
-  // Initialize serial and wait for port to open:
-  Serial.begin(9600);
-  // This delay gives the chance to wait for a Serial Monitor without blocking if none is found
-  delay(1500);
-
   // Defined in thingProperties.h
   initProperties();
 
@@ -47,6 +46,14 @@ void setupCloud()
   setDebugMessageLevel(2);
   ArduinoCloud.printDebugInfo();
   last_cloud_update = millis();
+
+  if (measure_cloud_time)
+  {
+    cloud_average_fs = 0;
+    cloud_max_fs = 0;
+    cloud_min_fs = INT16_MAX;
+    cloud_last_sample_time = 0;
+  }
 }
 
 void loopCloud()
@@ -54,8 +61,36 @@ void loopCloud()
   current_cloud_time = millis();
   if (current_cloud_time - last_cloud_update >= cloud_update_rate)
   {
+
+    if (measure_cloud_time == true)
+    {
+      cloud_last_sample_time = micros(); // Update timing variable
+    }
+
     last_cloud_update = current_cloud_time;
     ArduinoCloud.update();
+
+    if (measure_cloud_time == true)
+    {
+      // Timing measurements, measures the time since the last update of cloud_sample_time
+      unsigned long current_fs;
+      current_fs = micros() - cloud_last_sample_time;         // Calculate sample time
+      cloud_average_fs = (cloud_average_fs + current_fs) / 2; // Not really an average
+      if (current_fs > cloud_max_fs)
+      {
+        cloud_max_fs = current_fs;
+      }
+      else if (current_fs < cloud_min_fs)
+      {
+        cloud_min_fs = current_fs;
+      }
+      Serial.print("Timing, min: ");
+      Serial.print(cloud_min_fs);
+      Serial.print("; max: ");
+      Serial.print(cloud_max_fs);
+      Serial.print("; Average: ");
+      Serial.println(cloud_average_fs);
+    }
   }
 }
 
@@ -69,10 +104,10 @@ void onTest2Change()
   // Do something
 }
 
-void onSleepValChange() {
+void onSleepValChange()
+{
   // Do something
 }
-
 
 void onDBBoundaryChange()
 {
@@ -91,10 +126,10 @@ void write_dB_boundary(int new_dB_boundary)
 
 bool get_sleep_val()
 {
-  return sleep_Val; 
+  return sleep_Val;
 }
 
-bool write_sleep_val(bool new_sleep_val)
+void write_sleep_val(bool new_sleep_val)
 {
-  sleep_Val = new_sleep_val; 
+  sleep_Val = new_sleep_val;
 }
