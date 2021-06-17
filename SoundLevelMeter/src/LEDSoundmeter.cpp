@@ -19,6 +19,9 @@ LedMeter::LedMeter(float new_min_value, float new_max_value, int new_pins[])
   pinMode(LedMeter::pins[7], OUTPUT);
   LedMeter::max_value = new_max_value;
   LedMeter::min_value = new_min_value;
+  LED_max_fs = 0;
+  LED_min_fs = UINT16_MAX;
+  LED_last_sample_time = 0;
 }
 
 LedMeter::LedMeter(float new_min_value, float new_max_value)
@@ -28,6 +31,12 @@ LedMeter::LedMeter(float new_min_value, float new_max_value)
 
 void LedMeter::write_value(float value)
 {
+  // Timing
+  if (measure_LED_time)
+  {
+    LED_last_sample_time = micros();
+  }
+
   // Convert the level to be between 0 and 8
   int leds_to_turn_on = (int)ceil((value / max_value) * 8);
   leds_to_turn_on -= 1;
@@ -84,6 +93,27 @@ void LedMeter::write_value(float value)
   default:
     // Number is expected to be above 8, don't turn off LED's
     break;
+  }
+  if (measure_LED_time == true) // The ""== true" is for readability purposes
+  {
+    // Timing measurements, measures the time since the last update of LED_last_sample_time
+    unsigned long current_fs;
+    current_fs = micros() - LED_last_sample_time; // Calculate sample time
+    if (current_fs > LED_max_fs)
+    {
+      LED_max_fs = current_fs;
+    }
+    else if (current_fs < LED_min_fs)
+    {
+      LED_min_fs = current_fs;
+    }
+
+    Serial.print("Timing, LED, min: ");
+    Serial.print(LED_min_fs);
+    Serial.print("; max: ");
+    Serial.print(LED_max_fs);
+    Serial.print("; Current: ");
+    Serial.println(current_fs);
   }
 }
 
