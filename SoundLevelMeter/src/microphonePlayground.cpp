@@ -145,4 +145,5 @@ void loopMicrophone()
     Serial.println(earMeter.get_max_value());
 
     write_dB_read(average);
+    */
 }
