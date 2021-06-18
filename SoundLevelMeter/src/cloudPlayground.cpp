@@ -111,7 +111,7 @@ void onSleepValChange()
 
 void onDBBoundaryChange()
 {
-  earMeter.set_max_value(dB_boundary);
+  earMeter.set_max_value_dB(dB_boundary);
 }
 
 void write_dB_read(int new_dB_read)

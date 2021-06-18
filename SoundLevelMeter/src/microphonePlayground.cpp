@@ -66,6 +66,11 @@ void setupMicrophone()
     {
         mv_average_output.push(0);
     }
+    lcd.setCursor(14, 0);
+    lcd.write(byte(0));
+    lcd.write(byte(1));
+    lcd.setCursor(0, 1);
+    lcd.print("Max: ");
 }
 
 // Read the collected data and send info
@@ -78,8 +83,8 @@ void loopMicrophone()
     int max = 0;
     int min = INT16_MAX; // Large
     int pot_reading;
-    float deviations[5];
     float average;
+    float measured_dB;
 
     //
     // Check entry conditions
@@ -104,9 +109,9 @@ void loopMicrophone()
         old_pot_reading = pot_reading;
         // Scale the potentiometer reading to be the same scale as the microphone reading
         //pot_reading = pot_reading * 900; // Approximation
-        int pot_reading_shifted = pot_reading << 10;
+        int pot_reading_shifted = pot_reading << 11;
         earMeter.set_max_value(pot_reading_shifted);
-        write_dB_boundary(earMeter.get_max_value());
+        write_dB_boundary(earMeter.get_max_value_dB());
     }
 
     analogReadResolution(16); // Back to old resolution
@@ -122,7 +127,7 @@ void loopMicrophone()
     // Safety measure if the buffer is empty
     while (!mic_readings.isEmpty())
     {
-        current_reading = mic_readings.pop();
+        current_reading = mic_readings.shift();
         sound_level_raw += current_reading;
         if (max < current_reading)
         {
@@ -132,31 +137,23 @@ void loopMicrophone()
         {
             min = current_reading;
         }
-        // TEST
-        // for (int i = 0; i < 5; i++)
-        // {
-        //     if (five_max_values[i] < current_reading)
-        //     {
-        //         five_max_values.push(current_reading);
-        //     }
-        // }
     }
     average = (float)sound_level_raw / (float)measurements;
 
     // Moving average average calculation
-    last_mv_average = last_mv_average + ((average - mv_average_output.pop()) / MOVING_AVERAGE_SIZE);
-    mv_average_output.push(average);
-
-    // Deviation from mean test
-    /*
-    float average_deviation = 0.0;
-    for (int i = 0; i < 5; i++)
+    int mv_buffer_size = mv_average_output.size();
+    if (mv_buffer_size > 0)
     {
-        deviations[i] = five_max_values.pop() - last_mv_average;
-        average_deviation += deviations[i];
+        last_mv_average = last_mv_average + ((average - mv_average_output.shift()) / (float)mv_buffer_size);
+        mv_average_output.push(average);
     }
-    average_deviation = average_deviation / 5.0;
-    */
+    else
+    {
+        last_mv_average = -1;
+    }
+
+    // Convert to dB
+    measured_dB = 0.0095 * last_mv_average - 114.57;
 
     // Timing code part 1, currently measuring LCD time
     if (measure_dataprocessing == true)
@@ -168,9 +165,12 @@ void loopMicrophone()
     // Output, lcd, led, serial, cloud
     //
     lcd.setCursor(0, 0);
-    lcd.print(last_mv_average);
-    lcd.write(byte(0));
-    lcd.write(byte(1));
+    lcd.print((int)measured_dB);
+    lcd.print(" dB ");
+    lcd.setCursor(5, 1);
+    //    lcd.print("Max: ");
+    lcd.print((int)earMeter.get_max_value_dB());
+    lcd.print(" dB");
 
     // Timing code part 2
     if (measure_dataprocessing == true)
@@ -200,15 +200,22 @@ void loopMicrophone()
 
     // Serial output
 
-    Serial.print("Measurements: ");
-    Serial.print(measurements);
-    Serial.print("; Min: ");
-    Serial.print(min);
+    //    Serial.print("Samples: ");
+    //    Serial.print(measurements);
+    //    Serial.print("; Min: ");
+    //    Serial.print(min);
     Serial.print("; Max: ");
     Serial.print(max);
-    Serial.print("; Average level: ");
+    Serial.print("; mv_average: ");
     Serial.print(last_mv_average);
-    Serial.print("; Potmeter: ");
+    Serial.print("; dB: ");
+    Serial.print(measured_dB);
+
+    Serial.print("; mv_diff: ");
+    Serial.print(max - last_mv_average);
+    Serial.print("; diff: ");
+    Serial.print(max - average);
+    Serial.print("; potm: ");
     Serial.print(pot_reading);
     Serial.print("; Max LED: ");
     Serial.println(earMeter.get_max_value());
@@ -229,7 +236,7 @@ void loopMicrophone()
     */
 
     // Cloud output
-    write_dB_read(last_mv_average);
+    write_dB_read(measured_dB);
 
     // Set the sampling flag back
     using_ISP_variable_flag = false;

@@ -31,6 +31,8 @@ LedMeter::LedMeter(float new_min_value, float new_max_value)
 
 void LedMeter::write_value(float value)
 {
+  int leds_to_turn_on;
+
   // Timing
   if (measure_LED_time)
   {
@@ -38,12 +40,17 @@ void LedMeter::write_value(float value)
   }
 
   // Convert the level to be between 0 and 8
-  int leds_to_turn_on = (int)ceil((value / max_value) * 8);
-  leds_to_turn_on -= 1;
+
   if (value == -1.0)
   {
     leds_to_turn_on = 0;
   }
+  else
+  {
+    leds_to_turn_on = (int)ceil((value / max_value) * 8);
+    leds_to_turn_on -= 1;
+  }
+
   // Turn on whatever LED's needs to be turned on
   // Fall-through is expected and desired.
   switch (leds_to_turn_on)
@@ -129,6 +136,16 @@ void LedMeter::set_max_value(float new_max_value)
 void LedMeter::set_min_value(float new_min_value)
 {
   this->min_value = new_min_value;
+}
+
+float LedMeter::get_max_value_dB()
+{
+  return this->max_value * 0.0095 - 114.57;
+}
+
+void LedMeter::set_max_value_dB(float new_max_value_dB)
+{
+  this->max_value = 105 * new_max_value_dB + 12030;
 }
 
 LedMeter::~LedMeter()

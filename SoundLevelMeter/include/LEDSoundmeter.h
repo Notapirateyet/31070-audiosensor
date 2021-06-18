@@ -16,8 +16,10 @@ public:
     LedMeter(float min_value, float max_value);
     void write_value(float value);
     float get_max_value();
+    float get_max_value_dB();
     void set_max_value(float new_max_value);
     void set_min_value(float new_min_value);
+    void set_max_value_dB(float new_max_value_dB);
     bool measure_LED_time = false;
     ~LedMeter();
 };

@@ -21,7 +21,7 @@ int const buttonPin = A1;
 volatile int sleep_count = 0;
 int sleep_count_old = 0;
 int buttonState = 0;
-bool sleep_bool = false; 
+bool sleep_bool = false;
 
 void wakeupfunc()
 {
@@ -47,32 +47,30 @@ void loopSleep()
     // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
     if (buttonState == HIGH)
     {
-        lcd.setCursor(3, 1);
-        lcd.write("Button up");
+        lcd.setCursor(12, 1);
+        lcd.write("up:");
         lcd.print(sleep_count);
         // turn LED on:
         sleep_count_old = sleep_count;
-        
+
         if (sleep_bool == true)
-            {
-                before_sleeping();
-                LowPower.sleep();
-                WiFi.end();
-            }
+        {
+            before_sleeping();
+            LowPower.sleep();
+            WiFi.end();
+        }
     }
     else if (buttonState == LOW)
     {
-        lcd.setCursor(3, 1);
+        lcd.setCursor(10, 1);
         lcd.write(byte(0));
         lcd.write(byte(1));
-        lcd.write("   down");
+        lcd.write("down:");
         if (sleep_count_old == sleep_count)
         {
             before_sleeping();
             LowPower.sleep();
         }
     }
-    sleep_bool = get_sleep_val(); 
-
-
+    sleep_bool = get_sleep_val();
 }

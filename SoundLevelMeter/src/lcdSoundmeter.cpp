@@ -49,9 +49,7 @@ void setupLCD()
     lcd.createChar(1, customCharBar1);
     lcd.createChar(2, customCharFilled);
     lcd.setCursor(0, 0); // Lcd first row is 0
-    lcd.write("Sound! ");
-    lcd.write(byte(0));
-    lcd.write(byte(1));
+    lcd.write("Sound");
 }
 
 void loopLCD()

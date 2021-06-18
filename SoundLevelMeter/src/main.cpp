@@ -18,27 +18,28 @@ unsigned long loop_max_fs, loop_min_fs, loop_last_sample_time;
 void setup()
 {
   // Open the serial communications and wait for port to open:
-  // Baud rate of 115200 is used instead of 9600 for a faster data rate, which means better quality
   Serial.begin(9600);
   delay(1200); // Gives a chance for the serial monitor to find something
 
-  setupCloud();
-  setupLCD();
-  setupLED();
-  setupMicrophone(); // After LED
-  setupSleep();
+  setupCloud();      // Initialize the WiFi chip
+  setupLCD();        // Initialize LCD
+  setupLED();        // Initialize LED
+  setupMicrophone(); // Set values, run after LED
+  setupSleep();      // Prepare sleep and interrupts
 }
 
 void loop()
 {
-  loopMicrophone();
-  loopCloud();
-  //loopPotentiometer();
-  loopLCD();
-  //loopLED();
-  loopSleep();
+  loopMicrophone(); // Measures and handles output
+  loopCloud();      // Synchronizes with the arduino cloud
+  //loopLCD(); // Makes 3 bars, not required.
+  //loopLED(); // Turns the LED's on and off
+  loopSleep(); // Checks if the sleeping conditions are met
 
-  if (measure_loop_time == true) // The ""== true" is for readability purposes
+  //
+  // Timing
+  //
+  if (measure_loop_time == true) // The "== true" is for readability purposes
   {
     // Timing measurements, measures the time since the last update of loop_last_sample_time
     unsigned long current_fs;
