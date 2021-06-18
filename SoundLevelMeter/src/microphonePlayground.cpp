@@ -15,7 +15,7 @@
 const int micPin = A0;
 const int potPin = A2;
 int old_pot_reading = 0;
-const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = BUFFER_SIZE;
+const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 400;
 
 //Variables
 CircularBuffer<int, BUFFER_SIZE> mic_readings;
@@ -48,7 +48,7 @@ void setupMicrophone()
     pinMode(micPin, INPUT);
     analogReadResolution(16); //resolution is set as high as possible
     earMeter.set_max_value(40020);
-    earMeter.set_min_value(0);
+    earMeter.set_min_value(10000);
     // Initialize timer
     MyTimer5.begin(800); // [Hz]
     MyTimer5.attachInterrupt(measureInterrupt);
