@@ -16,11 +16,9 @@ void onTest1Change();
 void onTest2Change();
 void onSleepValChange();
 
-
 int dB_boundary;
 int dB_read;
 bool sleep_Val;
-
 
 void initProperties()
 {

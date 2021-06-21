@@ -25,13 +25,21 @@ void setup()
   setupLCD();        // Initialize LCD
   setupLED();        // Initialize LED
   setupMicrophone(); // Set values, run after LED
-  setupSleep();      // Prepare sleep and interrupts
+  setupSleep(setup); // Prepare sleep and interrupts
+  // Timing
+  if (measure_loop_time)
+  {
+    loop_max_fs = 0;
+    loop_min_fs = UINT16_MAX;
+    loop_last_sample_time = micros();
+  }
 }
 
 void loop()
 {
-  loopMicrophone(); // Measures and handles output
-  loopCloud();      // Synchronizes with the arduino cloud
+  WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY; // Clear WTD bit, the cloud code needs this if not used
+  loopMicrophone();                     // Measures and handles output
+  loopCloud();                          // Synchronizes with the arduino cloud
   //loopLCD(); // Makes 3 bars, not required.
   //loopLED(); // Turns the LED's on and off
   loopSleep(); // Checks if the sleeping conditions are met
@@ -53,11 +61,13 @@ void loop()
       loop_min_fs = current_fs;
     }
     loop_last_sample_time = micros();
+    using_ISP_variable_flag = true; // Sampling is turned off to not interrupt serial communication
     Serial.print("Timing, loop, min: ");
     Serial.print(loop_min_fs);
     Serial.print("; max: ");
     Serial.print(loop_max_fs);
     Serial.print("; Current: ");
     Serial.println(current_fs);
+    using_ISP_variable_flag = false;
   }
 }

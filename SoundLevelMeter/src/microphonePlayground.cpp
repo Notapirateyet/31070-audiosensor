@@ -15,7 +15,7 @@
 const int micPin = A0;
 const int potPin = A2;
 int old_pot_reading = 0;
-const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 400;
+const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 500;
 
 //Variables
 CircularBuffer<int, BUFFER_SIZE> mic_readings;
@@ -59,7 +59,7 @@ void setupMicrophone()
         data_average_fs = 0;
         data_max_fs = 0;
         data_min_fs = INT16_MAX;
-        data_last_sample_time = 0;
+        data_last_sample_time = micros();
     }
     // Fill moving average with 0
     for (int i = 0; i < MOVING_AVERAGE_SIZE; i++)
@@ -85,6 +85,7 @@ void loopMicrophone()
     int pot_reading;
     float average;
     float measured_dB;
+    unsigned long current_fs;
 
     //
     // Check entry conditions
@@ -108,14 +109,18 @@ void loopMicrophone()
         // Update vars
         old_pot_reading = pot_reading;
         // Scale the potentiometer reading to be the same scale as the microphone reading
-        //pot_reading = pot_reading * 900; // Approximation
+        //pot_reading = pot_reading * 1800; // Approximation
         int pot_reading_shifted = pot_reading << 11;
         earMeter.set_max_value(pot_reading_shifted);
         write_dB_boundary(earMeter.get_max_value_dB());
     }
 
     analogReadResolution(16); // Back to old resolution
-
+    // Timing code part 1, currently measuring data processing time
+    if (measure_dataprocessing == true)
+    {
+        data_last_sample_time = micros(); // Update timing variable
+    }
     //
     // Do some data processing
     //
@@ -155,10 +160,10 @@ void loopMicrophone()
     // Convert to dB
     measured_dB = 0.0095 * last_mv_average - 114.57;
 
-    // Timing code part 1, currently measuring LCD time
+    // Timing code part 2,
     if (measure_dataprocessing == true)
     {
-        data_last_sample_time = micros(); // Update timing variable
+        current_fs = micros() - data_last_sample_time; // Calculate sample time
     }
 
     //
@@ -176,8 +181,8 @@ void loopMicrophone()
     if (measure_dataprocessing == true)
     {
         // Timing measurements, measures the time since the last update of data_last_sample_time
-        unsigned long current_fs;
-        current_fs = micros() - data_last_sample_time;        // Calculate sample time
+        // unsigned long current_fs;
+        // current_fs = micros() - data_last_sample_time;        // Calculate sample time
         data_average_fs = (data_average_fs + current_fs) / 2; // Not really an average
         if (current_fs > data_max_fs)
         {
@@ -191,7 +196,9 @@ void loopMicrophone()
         Serial.print(data_min_fs);
         Serial.print("; max: ");
         Serial.print(data_max_fs);
-        Serial.print("; Average: ");
+        Serial.print("; current: ");
+        Serial.print(current_fs);
+        Serial.print("; average: ");
         Serial.println(data_average_fs);
     }
 

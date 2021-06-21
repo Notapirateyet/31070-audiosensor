@@ -47,8 +47,14 @@ void LedMeter::write_value(float value)
   }
   else
   {
-    leds_to_turn_on = (int)ceil((value / max_value) * 8);
+    leds_to_turn_on = (int)ceil(((value - this->min_value) / (this->max_value - this->min_value)) * 8);
     leds_to_turn_on -= 1;
+  }
+
+  // Handle the edge case of underflow
+  if (leds_to_turn_on < 0)
+  {
+    leds_to_turn_on = 0;
   }
 
   // Turn on whatever LED's needs to be turned on
