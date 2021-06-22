@@ -1,4 +1,11 @@
 // cloudPlayground.h
+
+/* 
+The connected file handles communication with the arduino coud.
+Call loopCloud in the main loop to update the cloud every 5 seconds.
+The cloud variables used in this project was a "write" or "get" function for accessing them.
+*/
+
 #ifndef CLOUDPLAYGROUND_H
 #define CLOUDPLAYGROUND_H
 void loopCloud();

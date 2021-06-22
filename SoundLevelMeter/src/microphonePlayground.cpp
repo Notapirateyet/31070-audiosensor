@@ -85,7 +85,7 @@ void loopMicrophone()
     int pot_reading;
     float average;
     float measured_dB;
-    unsigned long current_fs;
+    unsigned long current_fs = 0;
 
     //
     // Check entry conditions
@@ -175,7 +175,7 @@ void loopMicrophone()
     lcd.setCursor(5, 1);
     //    lcd.print("Max: ");
     lcd.print((int)earMeter.get_max_value_dB());
-    lcd.print(" dB");
+    lcd.print(" dB ");
 
     // Timing code part 2
     if (measure_dataprocessing == true)

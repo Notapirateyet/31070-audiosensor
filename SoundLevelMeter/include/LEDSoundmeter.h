@@ -1,7 +1,14 @@
 // lcdSoundmeter.h
+
+/*
+Defines a class for controlling the 8 LED's in the colorbar.
+loopLED can be called in the main loop to periodically turn on the LED's.
+There is no fault checking on the initialization, so double check the setup.
+*/
+
 #ifndef LED_SOUNDMETER_H
 #define LED_SOUNDMETER_H
-// Should probably make parts of this const
+
 class LedMeter
 {
 private:
@@ -24,6 +31,7 @@ public:
     ~LedMeter();
 };
 
+// Use this to access the colorbar.
 extern LedMeter earMeter;
 void setupLED();
 void loopLED();

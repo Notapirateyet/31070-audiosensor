@@ -7,8 +7,12 @@
 
 const char THING_ID[] = "ddb5b299-3f31-4cd1-9061-4f4462e501dc";
 
-const char SSID[] = "DR licensvogn"; // Network SSID (name)
-const char PASS[] = "hemmeligkode";  // Network password (use for WPA, or use as key for WEP)
+// // Mobile hotspot
+// const char SSID[] = "DR licensvogn"; // Network SSID (name)
+// const char PASS[] = "hemmeligkode";  // Network password (use for WPA, or use as key for WEP)
+// // In-class router
+const char SSID[] = "Arduino_router1";
+const char PASS[] = "Y1_c0urse_r1";
 
 void onDBBoundaryChange();
 void onDBReadChange();
