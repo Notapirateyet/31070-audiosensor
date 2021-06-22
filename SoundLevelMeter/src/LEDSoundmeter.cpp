@@ -1,3 +1,6 @@
+//Source file for the LED sound meter. This class sets and writed the LED color bar
+//This source file also calculates the number of LEDs corresponding to the noise level in dB
+
 #include <Arduino.h>
 #include "LEDSoundmeter.h"
 

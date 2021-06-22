@@ -1,3 +1,7 @@
+//Source file for the LCD display. This enables the LCD with the right digital pins on the Arduino MKR1000
+//This source file also creates custom characters, that are used to visualize the noise level to the user
+//The sound level in dB is printed to the LCD, as well as the current button (sleep) state
+
 #include <Arduino.h>
 #include <LiquidCrystal.h>
 #include "lcdSoundmeter.h"

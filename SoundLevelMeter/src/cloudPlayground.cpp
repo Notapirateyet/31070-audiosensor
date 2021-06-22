@@ -1,3 +1,7 @@
+//This source file is the cloud functionality, which makes the Arduino MKR1000 communicate with the IoT cloud
+//In this source file, variables between the cloud and the local variabels on the Arduino is passed around
+//This source file also determines the update rate to the IoT Cloud
+
 #include <Arduino.h>
 #include "arduino_secrets.h"
 #include "thingProperties.h"

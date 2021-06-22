@@ -1,4 +1,8 @@
 // sleep.cpp
+//This source file initializes sleep functionalities for the Arduino MKR1000, which enables the MCU to go in to low power mode
+//This source file enables sleep for both the physical sleep button, and the virtual sleep button in the IoT cloud
+
+
 #include "sleep.h"
 #include <LiquidCrystal.h>
 #include <string>
@@ -46,7 +50,7 @@ void before_sleeping()
     lcd.clear();
     Serial.println("Sleeping zzZZZzzz");
     Serial.end();
-    // delay(500);
+    // delay(500); //Used for debuggning
     WDT->CTRL.bit.ENABLE = 0; // Turn watchdog off
 }
 
