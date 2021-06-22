@@ -1,4 +1,6 @@
 // microphonePlayground.cpp
+//Source file that uses the microphone input, processes it in a circular buffer, and calculates the average noise value in dB
+//The function then sends the output in dB to the cloud, the serial port and the LCD
 
 #include <Arduino.h>
 #include <I2S.h>

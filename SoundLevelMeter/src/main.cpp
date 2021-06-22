@@ -1,3 +1,4 @@
+//Main file. All functions are initialized in setup, and run in loop
 // Downloaded libraries
 #include <Arduino.h>
 #include <LiquidCrystal.h>
@@ -18,7 +19,7 @@ void setup()
 {
   // Open the serial communications and wait for port to open:
   Serial.begin(9600);
-  delay(1200); // Gives a chance for the serial monitor to find something
+  //delay(1200); // Gives a chance for the serial monitor to find something - used for debugging
 
   setupCloud();      // Initialize the WiFi chip
   setupLCD();        // Initialize LCD
