@@ -62,6 +62,7 @@ void loop()
     }
     loop_last_sample_time = micros();
     using_ISP_variable_flag = true; // Sampling is turned off to not interrupt serial communication
+    //print to serial port - used for debugging
     Serial.print("Timing, loop, min: ");
     Serial.print(loop_min_fs);
     Serial.print("; max: ");

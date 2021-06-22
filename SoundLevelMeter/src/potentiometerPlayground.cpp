@@ -19,9 +19,9 @@
 
 
 
-int const potPin = A2; 
+int const potPin = A2; //Select analog ping A2
 int dBread = 0;       // variable to store the value coming from the sensor
-int dBlim = 0; 
+int dBlim = 0;  // variable to set the value in dB
 
 
 void setupPotentiometer() 
@@ -30,8 +30,8 @@ void setupPotentiometer()
 }
 
 void loopPotentiometer() {
-  analogReadResolution(4);
-  dBread = analogRead(potPin);    // read the value from the sensor
+  analogReadResolution(4); //Lower the resolution of the analog read. No need to use high resolution
+  dBread = analogRead(potPin);    // read the value from the sensor - set the dB lim accordingly
  if (dBread <= 3)
  {
    dBlim = 50; 

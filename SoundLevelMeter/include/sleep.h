@@ -3,7 +3,7 @@
 #define SLEEP_H
 #include <Arduino.h>
 
-void setupSleep(voidFuncPtr main_setup);
-void loopSleep();
+void setupSleep(voidFuncPtr main_setup); //setup sleep function
+void loopSleep(); //loop function for sleep
 
 #endif

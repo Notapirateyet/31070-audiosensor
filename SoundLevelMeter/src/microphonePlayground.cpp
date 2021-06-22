@@ -8,21 +8,21 @@
 #include "lcdSoundmeter.h"
 #include <Timer5.h>
 
-#define BUFFER_SIZE 1000
-#define MOVING_AVERAGE_SIZE 4
+#define BUFFER_SIZE 1000 //Size of the buffer, this can be changed
+#define MOVING_AVERAGE_SIZE 4 //Size of the average of the measurements
 
 //Parameters
-const int micPin = A0;
-const int potPin = A2;
-int old_pot_reading = 0;
-const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 500;
+const int micPin = A0; //Microphone input pin - Analog with ADC capabilities
+const int potPin = A2; //Potentiometer input pin - Analog with ADC capabilities
+int old_pot_reading = 0; 
+const int MINIMAL_MEASUREMENTS_FOR_DATA_PROCESSING = 500; //500 measurements before data is processed
 
 //Variables
-CircularBuffer<int, BUFFER_SIZE> mic_readings;
+CircularBuffer<int, BUFFER_SIZE> mic_readings; //Circular buffer 
 CircularBuffer<int, 5> five_max_values;
 CircularBuffer<float, MOVING_AVERAGE_SIZE> mv_average_output;
 float last_mv_average = 0;
-volatile bool buffer_overflow_flag = false;
+volatile bool buffer_overflow_flag = false; //Owerflow flag is set if buffer is full
 volatile bool using_ISP_variable_flag = false;
 
 // Timing
@@ -38,20 +38,20 @@ void measureInterrupt()
         // Store the value, and check if the buffer is full
         if (!mic_readings.push(micVal))
         {
-            buffer_overflow_flag = true; // Flag that the buffer is full
+            buffer_overflow_flag = true; // Flag that is true the buffer is full
         }
     }
 }
 
 void setupMicrophone()
 {
-    pinMode(micPin, INPUT);
-    analogReadResolution(16); //resolution is set as high as possible
+    pinMode(micPin, INPUT); //Microphone readings are set as an input
+    analogReadResolution(16); //resolution is set as high as possible 
     earMeter.set_max_value(40020);
     earMeter.set_min_value(10000);
     // Initialize timer
-    MyTimer5.begin(800); // [Hz]
-    MyTimer5.attachInterrupt(measureInterrupt);
+    MyTimer5.begin(800); // [Hz] Sampling frequency
+    MyTimer5.attachInterrupt(measureInterrupt); //Start interrupt routine
     MyTimer5.start();
     // Reset timing variables
     if (measure_dataprocessing)
@@ -61,7 +61,7 @@ void setupMicrophone()
         data_min_fs = INT16_MAX;
         data_last_sample_time = micros();
     }
-    // Fill moving average with 0
+    // Preallocate and fill moving average with 0
     for (int i = 0; i < MOVING_AVERAGE_SIZE; i++)
     {
         mv_average_output.push(0);
@@ -69,7 +69,7 @@ void setupMicrophone()
     lcd.setCursor(14, 0);
     lcd.write(byte(0));
     lcd.write(byte(1));
-    lcd.setCursor(0, 1);
+    lcd.setCursor(0, 1); //Write to LCD
     lcd.print("Max: ");
 }
 
@@ -122,11 +122,11 @@ void loopMicrophone()
         data_last_sample_time = micros(); // Update timing variable
     }
     //
-    // Do some data processing
+    // Do data processing
     //
     for (int i = 0; i < 5; i++)
     {
-        five_max_values.push(0);
+        five_max_values.push(0); //calculate the max values
     }
 
     // Safety measure if the buffer is empty
@@ -217,7 +217,7 @@ void loopMicrophone()
     Serial.print(last_mv_average);
     Serial.print("; dB: ");
     Serial.print(measured_dB);
-
+    //output to serial monitor - used for debugging
     Serial.print("; mv_diff: ");
     Serial.print(max - last_mv_average);
     Serial.print("; diff: ");

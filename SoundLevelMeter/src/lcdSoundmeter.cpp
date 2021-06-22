@@ -44,12 +44,12 @@ int lcd_blink_flag = 0;
 
 void setupLCD()
 {
-    lcd.begin(16, 2);
-    lcd.createChar(0, customCharBar0);
+    lcd.begin(16, 2); //Select pins
+    lcd.createChar(0, customCharBar0); //Plot custom chars on LCD
     lcd.createChar(1, customCharBar1);
     lcd.createChar(2, customCharFilled);
     lcd.setCursor(0, 0); // Lcd first row is 0
-    lcd.write("Sound");
+    lcd.write("Sound"); 
 }
 
 void loopLCD()
