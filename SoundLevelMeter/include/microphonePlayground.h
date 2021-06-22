@@ -12,7 +12,7 @@ It will call most other functions whenever it is done data processing.
 
 void setupMicrophone();
 void loopMicrophone();
-// This provides a way to not do analog measurements without disabling interrupts. (0.87 ms @ 800 Hz)
+// This provides a way to  not do analog measurements without disabling interrupts. (0.87 ms @ 800 Hz)
 extern volatile bool using_ISP_variable_flag;
 
 #endif
