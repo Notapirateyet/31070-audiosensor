@@ -22,11 +22,11 @@
 */
 // Definitions
 unsigned long last_cloud_update, current_cloud_time;
-unsigned long cloud_update_rate = 5000; // [ms]
+unsigned long cloud_update_rate = 5000; // [ms] updates every 5 seconds to the cloud
 
 // Timing
 bool measure_cloud_time = false;
-unsigned long cloud_average_fs, cloud_max_fs, cloud_min_fs, cloud_last_sample_time;
+unsigned long cloud_average_fs, cloud_max_fs, cloud_min_fs, cloud_last_sample_time; //Time the measurements with the cloud
 
 void setupCloud()
 {
@@ -45,11 +45,11 @@ void setupCloud()
  */
   setDebugMessageLevel(2);
   ArduinoCloud.printDebugInfo();
-  last_cloud_update = millis();
+  last_cloud_update = millis(); //timer for last cloud update
 
   if (measure_cloud_time)
   {
-    cloud_average_fs = 0;
+    cloud_average_fs = 0; //sampling time for cloud
     cloud_max_fs = 0;
     cloud_min_fs = INT16_MAX;
     cloud_last_sample_time = 0;
@@ -68,7 +68,7 @@ void loopCloud()
     }
 
     last_cloud_update = current_cloud_time;
-    ArduinoCloud.update();
+    ArduinoCloud.update(); //update the variables to the cloud
 
     if (measure_cloud_time == true)
     {
@@ -89,47 +89,47 @@ void loopCloud()
       Serial.print("; max: ");
       Serial.print(cloud_max_fs);
       Serial.print("; Average: ");
-      Serial.println(cloud_average_fs);
+      Serial.println(cloud_average_fs); //Print the timing from the cloud 
     }
   }
 }
 
 void onTest1Change()
 {
-  // Serial.println(test1); // Print the string to serial on a change
+  // Serial.println(test1); // Print the string to serial on a change - used for testing 
 }
 
 void onTest2Change()
 {
-  // Do something
+  // Do something - test function not used
 }
 
 void onSleepValChange()
 {
-  // Do something
+  // Do something - test function not used
 }
 
 void onDBBoundaryChange()
 {
-  earMeter.set_max_value_dB(dB_boundary);
+  earMeter.set_max_value_dB(dB_boundary); //pass the dB boundary to the earmeter class
 }
 
 void write_dB_read(int new_dB_read)
 {
-  dB_read = new_dB_read;
+  dB_read = new_dB_read; //set dB read value locally from IoT cloud
 }
 
 void write_dB_boundary(int new_dB_boundary)
 {
-  dB_boundary = new_dB_boundary;
+  dB_boundary = new_dB_boundary; //set local dB boundary from IoT cloud
 }
 
 bool get_sleep_val()
 {
-  return sleep_Val;
+  return sleep_Val; //get sleep value from IoT cloud
 }
 
 void write_sleep_val(bool new_sleep_val)
 {
-  sleep_Val = new_sleep_val;
+  sleep_Val = new_sleep_val; //set local sleep value to true or false from IoT cloud
 }

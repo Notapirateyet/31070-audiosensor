@@ -8,7 +8,7 @@ LedMeter::LedMeter(float new_min_value, float new_max_value, int new_pins[])
   {
     LedMeter::pins[i] = new_pins[i];
   }
-
+//LED pints are set as an output
   pinMode(LedMeter::pins[0], OUTPUT);
   pinMode(LedMeter::pins[1], OUTPUT);
   pinMode(LedMeter::pins[2], OUTPUT);
@@ -120,7 +120,7 @@ void LedMeter::write_value(float value)
     {
       LED_min_fs = current_fs;
     }
-
+  //Print to serial. Used for debugging and timing measurement
     Serial.print("Timing, LED, min: ");
     Serial.print(LED_min_fs);
     Serial.print("; max: ");
@@ -132,7 +132,7 @@ void LedMeter::write_value(float value)
 
 float LedMeter::get_max_value()
 {
-  return LedMeter::max_value;
+  return LedMeter::max_value; //Get the max value to the LED
 }
 
 void LedMeter::set_max_value(float new_max_value)
@@ -146,12 +146,12 @@ void LedMeter::set_min_value(float new_min_value)
 
 float LedMeter::get_max_value_dB()
 {
-  return this->max_value * 0.0095 - 114.57;
+  return this->max_value * 0.0095 - 114.57; //Calculate max value in dB
 }
 
 void LedMeter::set_max_value_dB(float new_max_value_dB)
 {
-  this->max_value = 105 * new_max_value_dB + 12030;
+  this->max_value = 105 * new_max_value_dB + 12030;  //Calculate max value in dB
 }
 
 LedMeter::~LedMeter()
@@ -160,21 +160,22 @@ LedMeter::~LedMeter()
 
 // Create class for the LED control, using new pins and minmax values 0-8
 int reverseLEDpins[8] = {13, 12, 11, 10, 9, 8, 7, 6}; // Reverse order pins
-int LEDpins[8] = {6, 7, 8, 9, 10, A6, 14, 13};
+int LEDpins[8] = {6, 7, 8, 9, 10, A6, 14, 13}; //One analog A6 is used, since 12 and 13 is reserved for WiFi
 LedMeter earMeter(0, 8, LEDpins); // Use this for min 0, max 8, default pins
 // LedMeter earMeter(0, 8, reverseLEDpins);
 unsigned long LED_last_updated = 0;
 unsigned long LED_now = 0;
-unsigned long LED_update_rate = 500; // ms
+unsigned long LED_update_rate = 500; // ms, updates every 500 ms
 int cycle_value = 0;
 
 void setupLED()
 {
-  earMeter.write_value(8);
+  earMeter.write_value(8); //Set the number of LEDs
 }
 
 void loopLED()
 {
+  //Function to update the LEDs
   LED_now = millis();
   if (LED_now - LED_last_updated > LED_update_rate)
   {
@@ -190,10 +191,10 @@ void loopLED()
 
 float getLedMaxValue()
 {
-  return earMeter.get_max_value();
+  return earMeter.get_max_value(); //Get the max LED value 
 }
 
 void writeLedCurrentValue(float current_value)
 {
-  earMeter.write_value(current_value);
+  earMeter.write_value(current_value); //Set the current LED 
 }

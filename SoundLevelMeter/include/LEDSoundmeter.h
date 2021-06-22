@@ -12,11 +12,11 @@ There is no fault checking on the initialization, so double check the setup.
 class LedMeter
 {
 private:
-    int pins[8] = {6, 7, 8, 9, 10, 11, 12, 13};
-    float max_value = 8;
-    float min_value = 0;
+    int pins[8] = {6, 7, 8, 9, 10, 11, 12, 13}; //Digital pins used for LED
+    float max_value = 8; //Max LEDs
+    float min_value = 0; //Min LEDs
     // Timing
-    unsigned long LED_max_fs, LED_min_fs, LED_last_sample_time;
+    unsigned long LED_max_fs, LED_min_fs, LED_last_sample_time; 
 
 public:
     LedMeter(float min_value, float max_value, int pins[8]);
@@ -28,7 +28,7 @@ public:
     void set_min_value(float new_min_value);
     void set_max_value_dB(float new_max_value_dB);
     bool measure_LED_time = false;
-    ~LedMeter();
+    ~LedMeter(); //Destruct LedMeter
 };
 
 // Use this to access the colorbar.
